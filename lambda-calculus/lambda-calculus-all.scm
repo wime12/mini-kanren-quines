@@ -1,0 +1,5 @@
+(load "../r6rs-compat")
+(load "../mk")
+(include "../mk#.scm")
+(load "../readtable")
+(load "lambda-calculus")
