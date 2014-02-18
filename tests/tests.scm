@@ -282,7 +282,7 @@
              (symbolo x)
              (== `(c ,z d) y)
              (== 'panda z)))
-         '(1))
+         '())
 
 
 ;;; vim: set lispwords+=define-test,deftest,run,run*,fresh:
