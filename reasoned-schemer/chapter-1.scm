@@ -32,8 +32,23 @@
    (box-1.40a)
    (box-1.40b)
    (box-1.41)
-   
-   ))
+   (box-1.43)
+   (box-1.44)
+   (box-1.45)
+   (box-1.46)
+   (box-1.47)
+   (box-1.49)
+   (box-1.50)
+   (box-1.52)
+   (box-1.53)
+   (box-1.54)
+   (box-1.55)
+   (box-1.56)
+   (box-1.57)
+   (box-1.58)
+   (box-1.59)
+   (box-1.60)
+   (box-1.61)))
 
 (deftest box-1.10
   (run* (q)
@@ -275,5 +290,95 @@
       (fail)))
   '(extra olive))
 
+(deftest box-1.53
+  (run* (r)
+    (fresh (x y)
+      (== 'split x)
+      (== 'pea y)
+      (== (cons x (cons y '())) r)))
+  '((split pea)))
+
+(deftest box-1.54
+  (run* (r)
+    (fresh (x y)
+      (conde
+       ((== 'split x) (== 'pea y))
+       ((== 'navy x) (== 'bean y))
+       (fail))
+      (== (cons x (cons y '())) r)))
+  '((split pea) (navy bean)))
+
+(deftest box-1.55
+  (run* (r)
+    (fresh (x y)
+      (conde
+       ((== 'split x) (== 'pea y))
+       ((== 'navy x) (== 'bean y))
+       (fail))
+      (== (cons x (cons y (cons 'soup '()))) r)))
+  '((split pea soup) (navy bean soup)))
+
+;;; Definition box-1.56
+(define (teacupo x)
+  (conde
+   ((== 'tea x) succeed)
+   ((== 'cup x) succeed)
+   (fail)))
+
+(deftest box-1.56
+  (run* (x)
+    (teacupo x))
+  '(tea cup))
+
+;;; Caution: different result
+(deftest box-1.57
+  (run* (r)
+    (fresh (x y)
+      (conde
+       ((teacupo x) (== #t y) succeed)
+       ((== #f x) (== #t y))
+       (fail))
+      (== (cons x (cons y '())) r)))
+  '((#f #t) (tea #t) (cup #t)))
+
+(deftest box-1.58
+  (run* (r)
+    (fresh (x y z)
+      (conde
+       ((== y x) (fresh (x) (== z x)))
+       ((fresh (x) (== y x)) (== z x))
+       (fail))
+      (== (cons y (cons z '())) r)))
+  '((_.0 _.1) (_.0 _.1)))
+
+(deftest box-1.59
+  (run* (r)
+    (fresh (x y z)
+      (conde
+       ((== y x) (fresh (x) (== z x)))
+       ((fresh (x) (== y x)) (== z x))
+       (fail))
+      (== #f x)
+      (== (cons y (cons z '())) r)))
+  '((#f _.0) (_.0 #f)))
+
+(deftest box-1.60
+  (run* (q)
+    (let ((a (== #t q))
+	  (b (== #f q)))
+      b))
+  '(#f))
+
+(deftest box-1.61
+  (run* (q)
+    (let ((a (== #t q))
+	  (b (fresh (x)
+	       (== x q)
+	       (== #f x)))
+	  (c (conde
+	      ((== #t q) succeed)
+	      ((== #f q)))))
+      b))
+  '(#f))
 
 ;;; vim: set lispwords+=deftest,define-test,fresh,run,run* :

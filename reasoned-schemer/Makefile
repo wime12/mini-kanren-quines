@@ -1,4 +1,4 @@
-obj: reasoned-schemer-tests.o1 chapter-1.o1
+obj: reasoned-schemer-tests.o1 chapter-1.o1 chapter-2.o1
 
 reasoned-schemer-tests.o1: reasoned-schemer-tests.scm
 	rm -f reasoned-schemer-tests.o1
@@ -10,9 +10,14 @@ chapter-1.o1: chapter-1.scm
 	gambitc chapter-1
 	strip chapter-1.o1
 
-run-tests:
+chapter-2.o1: chapter-2.scm
+	rm -f chapter-2.o1
+	gambitc chapter-2
+	strip chapter-2.o1
+
+run-tests: chapter-1.scm chapter-2.scm run-tests.scm
 	gambitc -exe ../r6rs-compat ../mk ../test-framework/test-framework \
-		reasoned-schemer-tests chapter-1 run-tests 
+		reasoned-schemer-tests chapter-1 chapter-2 run-tests 
 	strip run-tests
 
 clean:
