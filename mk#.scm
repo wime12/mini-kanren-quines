@@ -150,12 +150,13 @@
 		    (map (lambda (g) `(,g ,c)) gs))))
     `(lambdag@ (,c)
        (inc
-	(ifa ,(pair-up gs) ,@(map pair-up other-gs))))))
+         (ifa ,(pair-up gs) ,@(map pair-up other-gs))))))
 
 (define-macro (ifa . args)
-  (cond ((null? args) '(mzero))
-	((and (>= (length args) 2)
-	      (list? (car args)) (>= (length (car args)) 2))
+  (cond
+    ((null? args) '(mzero))
+	((and (>= (length args) 1)
+	      (list? (car args)) (>= (length (car args)) 1))
 	 (let ((c-inf (gensym))
 	       (f (gensym))
 	       (a (gensym))
